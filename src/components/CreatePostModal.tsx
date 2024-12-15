@@ -1,10 +1,10 @@
 'use client'
-
 import { createPost } from "@/actions/posts.actions";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -14,6 +14,8 @@ interface CreatePostModalProps {
 }
 
 export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
+  const { toast } = useToast()
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -27,6 +29,10 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       setContent("");
       onClose();
       router.refresh();
+      toast({
+        title: "Post created",
+        description: "New post succesfully created.",
+      })
     });
   };
 

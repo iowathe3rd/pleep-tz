@@ -1,8 +1,8 @@
 'use client'
-
 import { deletePost } from "@/actions/posts.actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { Post } from "@/types/posts";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -12,6 +12,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
+  const {toast} = useToast();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -19,6 +20,10 @@ export default function PostCard({ post }: PostCardProps) {
     startTransition(async () => {
       await deletePost(post.id);
       router.refresh();
+      toast({
+        title: "Post Deleted",
+        description: "The post has been successfully deleted."
+      })
     });
   };
 
